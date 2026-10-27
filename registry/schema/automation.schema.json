@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://canopyworkshop.com/schemas/automation.schema.json",
+  "title": "Automation registry record",
+  "type": "object",
+  "required": ["id", "name", "agency", "status", "owner", "lane", "oversight_level", "exception_lane", "review"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "name": { "type": "string" },
+    "agency": { "type": "string" },
+    "division": { "type": "string" },
+    "status": { "enum": ["building", "pilot", "production", "winding-down", "retired"] },
+    "owner": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "role": { "type": "string" },
+        "email": { "type": "string" },
+        "github": { "type": "string" }
+      }
+    },
+    "process_card": { "type": "string", "description": "Path in the agency repo" },
+    "step_table": { "type": "string", "description": "Path in the agency repo" },
+    "recipe": { "type": "string", "description": "Path in the base toolkit" },
+    "lane": { "enum": ["deterministic", "agentic", "human", "mixed"] },
+    "oversight_level": { "enum": ["L0", "L1", "L2", "L3", "L4"] },
+    "exception_lane": { "enum": ["agent", "human"] },
+    "runtime": {
+      "type": "object",
+      "properties": {
+        "language": { "type": "string" },
+        "host": { "type": "string" },
+        "scheduler": { "type": "string" },
+        "repo_path": { "type": "string" }
+      }
+    },
+    "credentials": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "kind"],
+        "properties": {
+          "name": { "type": "string" },
+          "kind": { "enum": ["service-principal", "service-account", "managed-identity", "api-key", "certificate", "delegated"] },
+          "scopes": { "type": "array", "items": { "type": "string" } },
+          "expires": { "type": "string", "format": "date" },
+          "rotation_owner": { "type": "string" }
+        }
+      }
+    },
+    "data_classification": { "type": "string" },
+    "controls": { "type": "array", "items": { "type": "string" } },
+    "records": {
+      "type": "object",
+      "properties": {
+        "log_location": { "type": "string" },
+        "retention_series": { "type": "string" },
+        "exemptions_applied": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "properties": {
+        "period": { "enum": ["weekly", "monthly", "quarterly"] },
+        "volume": { "type": ["integer", "null"] },
+        "error_rate": { "type": ["number", "null"] },
+        "time_saved_hours": { "type": ["number", "null"] },
+        "exceptions_routed": { "type": ["integer", "null"] },
+        "human_queue_median_age_hours": { "type": ["number", "null"] },
+        "as_of": { "type": "string", "format": "date" }
+      }
+    },
+    "updates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "cadence"],
+        "properties": {
+          "name": { "type": "string" },
+          "cadence": { "enum": ["monthly", "quarterly", "semiannual", "annual", "on-release"] },
+          "next": { "type": "string", "format": "date" }
+        }
+      }
+    },
+    "review": {
+      "type": "object",
+      "required": ["cadence", "next"],
+      "properties": {
+        "cadence": { "enum": ["monthly", "quarterly", "semiannual", "annual"] },
+        "next": { "type": "string", "format": "date" },
+        "last": { "type": ["string", "null"], "format": "date" },
+        "last_decision": { "enum": ["scale-up", "keep", "wind-down", null] }
+      }
+    },
+    "history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["date", "event"],
+        "properties": {
+          "date": { "type": "string", "format": "date" },
+          "event": { "type": "string" },
+          "evidence": { "type": "string" }
+        }
+      }
+    }
+  }
+}

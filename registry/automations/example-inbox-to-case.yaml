@@ -1,0 +1,81 @@
+# SPDX-License-Identifier: CC-BY-SA-4.0
+# Example registry record. Real records live in the agency repo. Placeholders in <angle brackets>.
+
+id: example-inbox-to-case
+name: Inbox to case system (example)
+agency: <Agency name>
+division: <Division / bureau>
+status: building
+
+owner:
+  name: <named person>
+  role: <role>
+  email: <agency email>
+  github: <handle, optional>
+
+process_card: process-cards/inbox-to-case.md
+step_table: step-tables/inbox-to-case.md
+recipe: recipes/inbox-to-case-system
+
+lane: mixed
+oversight_level: L2
+exception_lane: human
+
+runtime:
+  language: python 3.12; powershell 7
+  host: azure-government
+  scheduler: github-actions
+  repo_path: automations/inbox-to-case
+
+credentials:
+  - name: svc-inbox-reader
+    kind: service-principal
+    scopes: [Mail.Read (application, scoped to one mailbox)]
+    expires: 2027-01-15
+    rotation_owner: <agency identity admin>
+  - name: svc-case-writer
+    kind: service-account
+    scopes: [case_api:create, case_api:update]
+    expires: 2027-04-01
+    rotation_owner: <application owner>
+
+data_classification: confidential
+
+controls:
+  - fl-ch119-public-records
+  - fl-ch257-records-retention
+  - fl-60gg-2-cybersecurity
+  - hipaa
+
+records:
+  log_location: <log store inside the agency boundary>
+  retention_series: GS1-SL <item>
+  exemptions_applied: []
+
+metrics:
+  period: monthly
+  volume: null
+  error_rate: null
+  time_saved_hours: null
+  exceptions_routed: null
+  human_queue_median_age_hours: null
+  as_of: 2026-10-16
+
+updates:
+  - name: dependency patch
+    cadence: quarterly
+    next: 2027-01-05
+  - name: controls review (April pass)
+    cadence: annual
+    next: 2027-04-15
+
+review:
+  cadence: quarterly
+  next: 2027-01-31
+  last: null
+  last_decision: null
+
+history:
+  - date: 2026-10-16
+    event: registered; status building
+    evidence: process card v1

@@ -1,0 +1,49 @@
+name: Field note
+description: What you saw on one engagement. Append-only, attributed, no identifying details.
+title: "[field note] "
+labels: ["field-note"]
+body:
+  - type: input
+    id: agency_type
+    attributes:
+      label: Agency type
+      description: health, revenue, licensing, education, general. Never the agency name without permission.
+    validations:
+      required: true
+  - type: input
+    id: touches
+    attributes:
+      label: Canon pages this bears on
+      placeholder: method/intake, capabilities/mailbox
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What the process was, roughly, and what the stack looked like.
+    validations:
+      required: true
+  - type: textarea
+    id: did
+    attributes:
+      label: What we did
+    validations:
+      required: true
+  - type: textarea
+    id: broke
+    attributes:
+      label: What broke
+  - type: textarea
+    id: differently
+    attributes:
+      label: What we would do differently
+    validations:
+      required: true
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checks
+      options:
+        - label: Nothing here identifies a person, a case, or a record
+          required: true
+        - label: I license this note under CC BY-SA 4.0
+          required: true

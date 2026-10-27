@@ -1,0 +1,66 @@
+name: Automation review
+description: Record a scheduled review of a registered automation and its decision.
+title: "[review] "
+labels: ["registry", "review"]
+body:
+  - type: input
+    id: automation
+    attributes:
+      label: Automation id
+      placeholder: agency-inbox-to-case
+    validations:
+      required: true
+  - type: input
+    id: period
+    attributes:
+      label: Period reviewed
+      placeholder: 2027-Q1
+    validations:
+      required: true
+  - type: textarea
+    id: metrics
+    attributes:
+      label: Metrics for the period
+      description: Volume, error rate, time saved, exceptions routed, human-queue median age.
+      value: |
+        - volume:
+        - error_rate:
+        - time_saved_hours:
+        - exceptions_routed:
+        - human_queue_median_age_hours:
+    validations:
+      required: true
+  - type: dropdown
+    id: decision
+    attributes:
+      label: Decision
+      options:
+        - keep
+        - scale-up
+        - wind-down
+    validations:
+      required: true
+  - type: dropdown
+    id: level
+    attributes:
+      label: Oversight level after this review
+      options:
+        - L0
+        - L1
+        - L2
+        - L3
+        - L4
+    validations:
+      required: true
+  - type: textarea
+    id: rationale
+    attributes:
+      label: Rationale and evidence
+    validations:
+      required: true
+  - type: checkboxes
+    id: followup
+    attributes:
+      label: Follow-up
+      options:
+        - label: Registry record updated (`review.last`, `review.last_decision`, `review.next`, `history[]`) by pull request
